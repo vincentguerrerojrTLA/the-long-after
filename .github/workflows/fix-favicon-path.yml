@@ -23,8 +23,8 @@ jobs:
           p = Path('index.html')
           s = p.read_text(encoding='utf-8')
           old = '<link rel="icon" type="image/png" href="./favicon.png" sizes="32x32" />'
-          new = '''<link rel="icon" type="image/png" sizes="32x32" href="/the-long-after/favicon.png?v=20260921-2" />
-<link rel="shortcut icon" type="image/png" href="/the-long-after/favicon.png?v=20260921-2" />'''
+          new = ('<link rel="icon" type="image/png" sizes="32x32" href="/the-long-after/favicon.png?v=20260921-2" />\n'
+                 '<link rel="shortcut icon" type="image/png" href="/the-long-after/favicon.png?v=20260921-2" />')
           if old not in s:
               raise SystemExit('Expected favicon tag not found')
           p.write_text(s.replace(old, new, 1), encoding='utf-8')
