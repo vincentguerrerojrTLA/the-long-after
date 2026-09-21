@@ -206,5 +206,6 @@ function setItem(group,item,push=true){if(!DATA[group]?.[item])return;state.item
 function route(){const p=location.hash.replace(/^#\//,'').split('/').filter(Boolean);const view=p[0]||'home';if(DATA[view]&&p[1]&&DATA[view][p[1]]){state.item[view]=p[1];document.querySelectorAll(`[data-group="${view}"] .item-tab`).forEach(b=>b.classList.toggle('active',b.dataset.item===p[1]));}setView(view,false)}
 document.addEventListener('click',e=>{const n=e.target.closest('[data-view]');if(n){setView(n.dataset.view);return}const j=e.target.closest('[data-jump]');if(j){setView(j.dataset.jump);return}const t=e.target.closest('.item-tab');if(t){const g=t.closest('[data-group]').dataset.group;setItem(g,t.dataset.item);return}const d=e.target.closest('[data-detail]');if(d){state.detail[d.dataset.detailGroup]=d.dataset.detail;render(d.dataset.detailGroup);return}});window.addEventListener('popstate',route);route();
 </script>
+<script src="./assets/live-sync.js?v=2"></script>
 </body>
 </html>
