@@ -1,0 +1,22 @@
+name: Public content classification guard
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'scripts/validate-public-content.py'
+      - '.github/workflows/public-content-guard.yml'
+  pull_request:
+    paths:
+      - 'data/**'
+      - 'scripts/validate-public-content.py'
+      - '.github/workflows/public-content-guard.yml'
+permissions:
+  contents: read
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate public data release classifications
+        run: python scripts/validate-public-content.py
