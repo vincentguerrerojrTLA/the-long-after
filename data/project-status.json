@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-09-21T12:27:00Z",
+  "project": "THE LONG AFTER",
+  "mode": "public-project-mirror",
+  "sync": {
+    "status": "LIVE",
+    "pollSeconds": 15,
+    "authoritativeSource": "Notion project records",
+    "publicMirror": "GitHub Pages",
+    "note": "Website-relevant project changes made through the project workflow are mirrored here as part of the same update."
+  },
+  "release": {
+    "label": "MICRO RELEASE WINDOW",
+    "status": "PLANNING",
+    "estimatedDropLabel": "Estimated Micro Drop",
+    "estimatedDrop": "NOVEMBER 2026",
+    "window": "Working window · Nov 2–Nov 30, 2026",
+    "fastPath": "Oct 19–Nov 2",
+    "planningTarget": "Nov 2–Nov 30",
+    "riskCase": "Nov 30–Dec 28"
+  },
+  "active": {
+    "ticker": "Micro Smoke Test",
+    "phaseId": "foundation",
+    "phaseNumber": "01",
+    "phaseTitle": "Foundation",
+    "completedGates": 3,
+    "totalGates": 4,
+    "focus": "Close regression smoke-test proof.",
+    "note": "Current active ticket: automated regression smoke-test proof. Schedule re-baselines when a phase closes or a material blocker changes."
+  },
+  "activity": [
+    {"kind": "ACTIVE", "text": "Micro Smoke Test"},
+    {"kind": "APPROVED", "text": "Environment direction"},
+    {"kind": "PLANNING", "text": "Nov 2026 Micro window"}
+  ],
+  "phases": [
+    {"id": "foundation", "number": "01", "title": "Foundation", "state": "ACTIVE", "completed": 3, "total": 4, "focus": "Close regression smoke-test proof."},
+    {"id": "core-survival-loop", "number": "02", "title": "Core Survival Loop", "state": "LOCKED", "focus": "Controller, combat, survival, inventory and infected perception."},
+    {"id": "world-coop", "number": "03", "title": "World & Co-op", "state": "LOCKED", "focus": "Metrics, Level 1, streaming seams, biome transition and 1–4 direct-host seams."},
+    {"id": "content-atmosphere", "number": "04", "title": "Content & Atmosphere", "state": "LOCKED", "focus": "Final Micro visual/audio/environment content and QC."},
+    {"id": "release-readiness", "number": "05", "title": "Release Readiness", "state": "LOCKED", "focus": "Integration, performance, save/load, playtest and approval."}
+  ],
+  "catalog": {
+    "world": {},
+    "arsenal": {},
+    "vehicles": {},
+    "audio": {}
+  }
+}
