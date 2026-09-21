@@ -3,8 +3,48 @@ import json
 from pathlib import Path
 import sys
 
-FORBIDDEN_LEVELS = {"INTERNAL", "CLASSIFIED", "BLACK"}
+PUBLIC = "PUBLIC"
+PROTECTED_LEVELS = {"INTERNAL", "CLASSIFIED", "BLACK"}
 errors = []
+
+
+def walk_classifications(value, path):
+    if isinstance(value, dict):
+        if "classification" in value:
+            level = str(value.get("classification", "")).upper()
+            if level != PUBLIC:
+                errors.append(f"{path} contains non-PUBLIC classification {level!r}")
+        for key, child in value.items():
+            walk_classifications(child, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            walk_classifications(child, f"{path}[{index}]")
+
+
+for path in sorted(Path("data").glob("*.json")):
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        errors.append(f"{path} is invalid JSON: {exc}")
+        continue
+
+    if not isinstance(data, dict):
+        errors.append(f"{path} root must be a JSON object")
+        continue
+
+    root_level = str(data.get("classification", "")).upper()
+    if root_level != PUBLIC:
+        if not root_level:
+            errors.append(f"{path} has no root classification; unclassified public data defaults to CLASSIFIED")
+        else:
+            errors.append(f"{path} root classification must be PUBLIC, found {root_level!r}")
+
+    walk_classifications(data, str(path))
+
+    raw_upper = path.read_text(encoding="utf-8", errors="replace").upper()
+    for level in PROTECTED_LEVELS:
+        if level in raw_upper:
+            errors.append(f"{path} contains protected classification marker {level}")
 
 lore_path = Path("data/lore-public.json")
 if not lore_path.exists():
@@ -12,14 +52,9 @@ if not lore_path.exists():
 else:
     try:
         lore = json.loads(lore_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        errors.append(f"lore-public.json is invalid JSON: {exc}")
+    except Exception:
         lore = {}
-
-    if lore.get("classification") != "PUBLIC":
-        errors.append("lore-public.json root classification must be PUBLIC")
-
-    items = lore.get("items")
+    items = lore.get("items") if isinstance(lore, dict) else None
     if not isinstance(items, dict):
         errors.append("lore-public.json items must be an object")
     else:
@@ -27,18 +62,8 @@ else:
             if not isinstance(item, dict):
                 errors.append(f"lore item {key!r} must be an object")
                 continue
-            level = item.get("classification")
-            if level != "PUBLIC":
-                errors.append(f"lore item {key!r} is not PUBLIC (found {level!r})")
-
-# Public data files must never carry protected classification labels.
-for path in Path("data").glob("*.json"):
-    text = path.read_text(encoding="utf-8", errors="replace")
-    upper = text.upper()
-    for level in FORBIDDEN_LEVELS:
-        marker = f'"CLASSIFICATION": "{level}"'
-        if marker in upper:
-            errors.append(f"{path} contains forbidden public classification {level}")
+            if item.get("classification") != PUBLIC:
+                errors.append(f"lore item {key!r} is not explicitly PUBLIC")
 
 if errors:
     print("PUBLIC CONTENT GUARD FAILED")
@@ -46,4 +71,4 @@ if errors:
         print(f"- {err}")
     sys.exit(1)
 
-print("PUBLIC CONTENT GUARD PASSED: only explicitly PUBLIC lore is present in the public mirror.")
+print("PUBLIC CONTENT GUARD PASSED: every website data mirror is explicitly PUBLIC and contains no protected classifications.")
