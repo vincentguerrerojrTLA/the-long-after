@@ -1,1 +1,0 @@
-The real favicon will be committed using Git data; this note can be removed afterward.
