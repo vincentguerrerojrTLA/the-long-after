@@ -1,14 +1,16 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-21T12:27:00Z",
+  "classification": "PUBLIC",
+  "updatedAt": "2026-09-21T14:25:00Z",
   "project": "THE LONG AFTER",
   "mode": "public-project-mirror",
+  "releasePolicy": "Only information explicitly cleared for public release may appear in this file.",
   "sync": {
     "status": "LIVE",
     "pollSeconds": 15,
     "authoritativeSource": "Notion project records",
     "publicMirror": "GitHub Pages",
-    "note": "Website-relevant project changes made through the project workflow are mirrored here as part of the same update."
+    "note": "Only PUBLIC-cleared website information is mirrored here. Internal, Classified, Black, and unclassified material is omitted."
   },
   "release": {
     "label": "MICRO RELEASE WINDOW",
@@ -28,7 +30,7 @@
     "completedGates": 3,
     "totalGates": 4,
     "focus": "Close regression smoke-test proof.",
-    "note": "Current active ticket: automated regression smoke-test proof. Schedule re-baselines when a phase closes or a material blocker changes."
+    "note": "Current public roadmap status. Schedule re-baselines when a phase closes or a publicly disclosed material blocker changes."
   },
   "activity": [
     {"kind": "ACTIVE", "text": "Micro Smoke Test"},
