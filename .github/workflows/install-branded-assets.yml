@@ -1,0 +1,71 @@
+name: Install branded website assets
+
+on:
+  push:
+    paths:
+      - '.asset-upload/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify staged asset package
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            ammunition backhoe-loader bulldozer dump-truck excavator launcher
+            motor-grader pump-shotgun sidearm skid-steer survivor-rifle telehandler
+            utility-vehicle wheel-loader
+          )
+          for f in "${files[@]}"; do
+            test -s ".asset-upload/${f}.b64" || { echo "Missing ${f}.b64"; exit 1; }
+          done
+
+      - name: Decode branded high-quality website assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            ammunition backhoe-loader bulldozer dump-truck excavator launcher
+            motor-grader pump-shotgun sidearm skid-steer survivor-rifle telehandler
+            utility-vehicle wheel-loader
+          )
+          for f in "${files[@]}"; do
+            base64 --decode ".asset-upload/${f}.b64" > "assets/${f}.jpg"
+            rm -f "assets/${f}.png"
+          done
+
+      - name: Point website to branded replacements
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          names = [
+              'ammunition','backhoe-loader','bulldozer','dump-truck','excavator','launcher',
+              'motor-grader','pump-shotgun','sidearm','skid-steer','survivor-rifle','telehandler',
+              'utility-vehicle','wheel-loader'
+          ]
+          for name in names:
+              text = text.replace(f"assets/{name}.png", f"assets/{name}.jpg?v=tla-branded-20260921")
+          p.write_text(text, encoding='utf-8')
+
+      - name: Clean staging files and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .asset-upload
+          rm -f .github/workflows/install-branded-assets.yml
+          git config user.name "TLA Website Bot"
+          git config user.email "331753744+vincentguerrerojrTLA@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace pixelated item art with branded TLA assets"
+          git push origin HEAD:main
