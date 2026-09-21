@@ -1,7 +1,10 @@
 (() => {
-  const DATA_URL = './data/project-status.json';
+  const RAW_BASE = 'https://raw.githubusercontent.com/vincentguerrerojrTLA/the-long-after/main';
+  const PROJECT_URL = `${RAW_BASE}/data/project-status.json`;
+  const LORE_URL = `${RAW_BASE}/data/lore-public.json`;
   let timer = null;
-  let lastFingerprint = '';
+  let lastProjectFingerprint = '';
+  let lastLoreFingerprint = '';
 
   const q = (sel, root = document) => root.querySelector(sel);
   const qa = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -109,9 +112,9 @@
         card.classList.toggle('active', phase.state === 'ACTIVE');
         setText(q('.phase-num', card), phase.number);
         setText(q('.phase-title', card), phase.title);
-        let state = phase.state || '';
-        if (Number.isFinite(Number(phase.completed)) && Number.isFinite(Number(phase.total))) state += ` · ${phase.completed}/${phase.total}`;
-        setText(q('.phase-state', card), state);
+        let phaseState = phase.state || '';
+        if (Number.isFinite(Number(phase.completed)) && Number.isFinite(Number(phase.total))) phaseState += ` · ${phase.completed}/${phase.total}`;
+        setText(q('.phase-state', card), phaseState);
         setText(q('.phase-focus', card), phase.focus);
       });
     }
@@ -153,6 +156,81 @@
     }
   }
 
+  function ensureLoreShell() {
+    if (typeof DATA === 'undefined' || typeof BGS === 'undefined' || typeof state === 'undefined') return null;
+    if (!DATA.lore) DATA.lore = {};
+    if (!state.item.lore) state.item.lore = '';
+    if (!state.detail.lore) state.detail.lore = null;
+    BGS.lore = 'assets/world-board.png';
+
+    const nav = q('.primary-nav');
+    if (nav && !q('[data-view="lore"]', nav)) {
+      const button = document.createElement('button');
+      button.className = 'nav';
+      button.dataset.view = 'lore';
+      button.textContent = 'Lore';
+      const roadmap = q('[data-view="roadmap"]', nav);
+      nav.insertBefore(button, roadmap || null);
+    }
+
+    let screen = q('[data-screen="lore"]');
+    if (!screen) {
+      screen = document.createElement('section');
+      screen.className = 'screen';
+      screen.dataset.screen = 'lore';
+      screen.innerHTML = `
+        <div class="hub" data-group="lore">
+          <aside class="rail">
+            <div class="rail-top"><div class="micro-label">Public Archive</div><h2>Lore</h2><p>Spoiler-safe world and story records. Protected discoveries stay sealed until their intended reveal.</p></div>
+            <div class="item-tabs"></div>
+          </aside>
+          <article class="workspace" id="workspace-lore"><div class="workspace-bg"></div><div class="workspace-body"></div></article>
+        </div>`;
+      const main = q('.stage') || q('main');
+      if (main) main.append(screen);
+    }
+    return screen;
+  }
+
+  function applyLoreData(lore) {
+    if (!lore || lore.classification !== 'PUBLIC' || !lore.items || typeof lore.items !== 'object') return;
+    const screen = ensureLoreShell();
+    if (!screen || typeof DATA === 'undefined') return;
+    const tabs = q('[data-group="lore"] .item-tabs', screen);
+    DATA.lore = {};
+    if (tabs) tabs.replaceChildren();
+
+    for (const [key, item] of Object.entries(lore.items)) {
+      if (!item || item.classification !== 'PUBLIC') continue;
+      DATA.lore[key] = {
+        img: item.img || 'assets/world-board.png',
+        chip: item.chip || 'PUBLIC LORE',
+        chipClass: item.chipClass || '',
+        title: item.title || item.label || key,
+        body: item.body || '',
+        facts: Array.isArray(item.facts) ? item.facts : [],
+        details: item.details && typeof item.details === 'object' ? item.details : {Overview: item.body || ''}
+      };
+      if (tabs) {
+        const tab = document.createElement('button');
+        tab.className = 'item-tab';
+        tab.dataset.item = key;
+        tab.innerHTML = '<strong></strong><small></small>';
+        setText(q('strong', tab), item.label || item.title || key);
+        setText(q('small', tab), item.subtitle || item.chip || 'Public lore');
+        tabs.append(tab);
+      }
+    }
+
+    const keys = Object.keys(DATA.lore);
+    if (!keys.length) return;
+    if (!DATA.lore[state.item.lore]) state.item.lore = keys[0];
+    qa('[data-group="lore"] .item-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.item === state.item.lore));
+    if (state.view === 'lore' && typeof render === 'function') render('lore');
+    if (location.hash.startsWith('#/lore') && typeof route === 'function') route();
+    window.TLA_PUBLIC_LORE = lore;
+  }
+
   function applyProjectData(data) {
     renderRelease(data);
     renderActivity(data);
@@ -163,25 +241,34 @@
     window.TLA_PROJECT_STATUS = data;
   }
 
+  async function getJson(url) {
+    const response = await fetch(`${url}?t=${Date.now()}`, {cache: 'no-store', mode: 'cors'});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+
   async function poll() {
-    setSyncBadge(lastFingerprint ? 'ok' : 'loading');
+    setSyncBadge((lastProjectFingerprint || lastLoreFingerprint) ? 'ok' : 'loading');
     try {
-      const response = await fetch(`${DATA_URL}?t=${Date.now()}`, {cache: 'no-store'});
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const fingerprint = JSON.stringify(data);
-      if (fingerprint !== lastFingerprint) {
-        applyProjectData(data);
-        lastFingerprint = fingerprint;
-        window.dispatchEvent(new CustomEvent('tla-project-sync', {detail: data}));
-      } else {
-        setSyncBadge('ok', data.updatedAt);
+      const [project, lore] = await Promise.all([getJson(PROJECT_URL), getJson(LORE_URL)]);
+      const projectFingerprint = JSON.stringify(project);
+      const loreFingerprint = JSON.stringify(lore);
+      if (projectFingerprint !== lastProjectFingerprint) {
+        applyProjectData(project);
+        lastProjectFingerprint = projectFingerprint;
+        window.dispatchEvent(new CustomEvent('tla-project-sync', {detail: project}));
       }
-      const seconds = Math.max(10, Number(data.sync?.pollSeconds || 15));
+      if (loreFingerprint !== lastLoreFingerprint) {
+        applyLoreData(lore);
+        lastLoreFingerprint = loreFingerprint;
+        window.dispatchEvent(new CustomEvent('tla-lore-sync', {detail: lore}));
+      }
+      setSyncBadge('ok', project.updatedAt || lore.updatedAt);
+      const seconds = Math.max(10, Number(project.sync?.pollSeconds || 15));
       clearTimeout(timer);
       timer = setTimeout(poll, seconds * 1000);
     } catch (error) {
-      console.warn('TLA live project sync retrying:', error);
+      console.warn('TLA live sync retrying:', error);
       setSyncBadge('error');
       clearTimeout(timer);
       timer = setTimeout(poll, 15000);
