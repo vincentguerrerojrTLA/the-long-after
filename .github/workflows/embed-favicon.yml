@@ -1,0 +1,43 @@
+name: Embed TLA favicon
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/embed-favicon.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  embed-favicon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Embed favicon directly into HTML
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, re
+          html = Path('index.html')
+          s = html.read_text(encoding='utf-8')
+          icon = base64.b64encode(Path('favicon.png').read_bytes()).decode('ascii')
+          tag = f'<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,{icon}" />'
+          s = re.sub(r'\n?<link rel="icon"[^>]*>\n?', '\n', s)
+          s = re.sub(r'\n?<link rel="shortcut icon"[^>]*>\n?', '\n', s)
+          marker = '<meta name="theme-color" content="#070a08" />'
+          if marker not in s:
+              raise SystemExit('theme-color marker not found')
+          s = s.replace(marker, marker + '\n' + tag, 1)
+          html.write_text(s, encoding='utf-8')
+          PY
+          rm .github/workflows/embed-favicon.yml
+      - name: Commit embedded favicon
+        run: |
+          git config user.name "TLA Website Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html .github/workflows/embed-favicon.yml
+          git commit -m "Embed TLA favicon directly in site"
+          git push origin main
