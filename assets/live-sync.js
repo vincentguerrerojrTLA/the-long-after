@@ -31,10 +31,66 @@
     }
   }
 
+  function ensureHomeProgressBar(data) {
+    const hero = q('[data-screen="home"] .hero') || q('.hero');
+    if (!hero) return;
+
+    let style = q('#tla-live-progress-style');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'tla-live-progress-style';
+      style.textContent = `
+        .tla-live-progress{margin:20px 0 4px;max-width:760px;padding:14px 16px 13px;border:1px solid rgba(183,255,60,.24);background:linear-gradient(180deg,rgba(8,14,10,.86),rgba(7,12,9,.72));backdrop-filter:blur(12px);box-shadow:0 16px 46px rgba(0,0,0,.24)}
+        .tla-live-progress__head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:10px}
+        .tla-live-progress__eyebrow{color:#a8b0aa;font:800 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase}
+        .tla-live-progress__title{margin-top:6px;color:#f3f4ef;font-size:14px;font-weight:900;letter-spacing:.02em}
+        .tla-live-progress__value{color:var(--acid);font:900 27px/1 ui-monospace,SFMono-Regular,Menlo,monospace}
+        .tla-live-progress__track{height:11px;border:1px solid rgba(230,237,228,.12);background:rgba(255,255,255,.07);overflow:hidden}
+        .tla-live-progress__fill{height:100%;width:0;background:linear-gradient(90deg,var(--acid),#dcff8b);box-shadow:0 0 22px rgba(183,255,60,.26);transition:width .45s ease}
+        .tla-live-progress__meta{display:flex;justify-content:space-between;gap:14px;margin-top:8px;color:#9fa9a1;font:700 9px/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.045em}
+        @media (max-width:760px){.tla-live-progress__meta{flex-direction:column;gap:4px}.tla-live-progress__value{font-size:23px}}
+      `;
+      document.head.append(style);
+    }
+
+    let panel = q('#tlaLiveProgress');
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = 'tlaLiveProgress';
+      panel.className = 'tla-live-progress';
+      panel.setAttribute('aria-label', 'Current public project progress');
+      panel.innerHTML = `
+        <div class="tla-live-progress__head">
+          <div><div class="tla-live-progress__eyebrow">Current phase progress</div><div class="tla-live-progress__title"></div></div>
+          <div class="tla-live-progress__value">0%</div>
+        </div>
+        <div class="tla-live-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="tla-live-progress__fill"></div></div>
+        <div class="tla-live-progress__meta"><span class="tla-live-progress__gates"></span><span class="tla-live-progress__ticker"></span></div>`;
+      const actions = q('.hero-actions', hero);
+      if (actions) actions.insertAdjacentElement('afterend', panel);
+      else hero.append(panel);
+    }
+
+    const active = data.active || {};
+    const progress = pct(Number(active.completedGates || 0), Number(active.totalGates || 0));
+    setText(q('.tla-live-progress__title', panel), `${active.phaseNumber || ''} — ${active.phaseTitle || 'Current phase'}`.trim());
+    setText(q('.tla-live-progress__value', panel), `${progress}%`);
+    setText(q('.tla-live-progress__gates', panel), `${active.completedGates ?? 0} of ${active.totalGates ?? 0} gates complete`);
+    setText(q('.tla-live-progress__ticker', panel), active.ticker ? `Active: ${active.ticker}` : '');
+    const fill = q('.tla-live-progress__fill', panel);
+    if (fill) fill.style.width = `${progress}%`;
+    const track = q('.tla-live-progress__track', panel);
+    if (track) {
+      track.setAttribute('aria-valuenow', String(progress));
+      track.setAttribute('aria-valuetext', `${progress}% — ${active.completedGates ?? 0} of ${active.totalGates ?? 0} gates complete`);
+    }
+  }
+
   function renderRelease(data) {
     const release = data.release || {};
     const active = data.active || {};
     const progress = pct(Number(active.completedGates || 0), Number(active.totalGates || 0));
+    ensureHomeProgressBar(data);
     const card = q('.release-card');
     if (card) {
       setText(q('.release-head b', card), release.label);
@@ -232,6 +288,11 @@
   }
 
   function applyProjectData(data) {
+    if (!data || data.classification !== 'PUBLIC') {
+      console.warn('TLA project sync rejected non-PUBLIC project data.');
+      setSyncBadge('error');
+      return;
+    }
     renderRelease(data);
     renderActivity(data);
     renderRoadmap(data);
