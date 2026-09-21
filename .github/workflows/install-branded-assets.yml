@@ -16,30 +16,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify staged asset package
+      - name: Verify staged asset bundle
         shell: bash
         run: |
           set -euo pipefail
-          files=(
-            ammunition backhoe-loader bulldozer dump-truck excavator launcher
-            motor-grader pump-shotgun sidearm skid-steer survivor-rifle telehandler
-            utility-vehicle wheel-loader
-          )
-          for f in "${files[@]}"; do
-            test -s ".asset-upload/${f}.b64" || { echo "Missing ${f}.b64"; exit 1; }
+          for n in 00 01 02 03; do
+            test -s ".asset-upload/branded_assets_part_${n}" || { echo "Missing bundle part ${n}"; exit 1; }
           done
 
       - name: Decode branded high-quality website assets
         shell: bash
         run: |
           set -euo pipefail
+          cat .asset-upload/branded_assets_part_00 .asset-upload/branded_assets_part_01 .asset-upload/branded_assets_part_02 .asset-upload/branded_assets_part_03 > /tmp/branded-assets.b64
+          base64 --decode /tmp/branded-assets.b64 > /tmp/branded-assets.zip
+          unzip -o /tmp/branded-assets.zip -d assets
           files=(
             ammunition backhoe-loader bulldozer dump-truck excavator launcher
             motor-grader pump-shotgun sidearm skid-steer survivor-rifle telehandler
             utility-vehicle wheel-loader
           )
           for f in "${files[@]}"; do
-            base64 --decode ".asset-upload/${f}.b64" > "assets/${f}.jpg"
+            test -s "assets/${f}.jpg" || { echo "Decoded asset missing: ${f}.jpg"; exit 1; }
             rm -f "assets/${f}.png"
           done
 
