@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "classification": "PUBLIC",
+  "updatedAt": "2026-09-21T12:45:00Z",
+  "releasePolicy": "Only explicitly PUBLIC lore is permitted in this file.",
+  "items": {
+    "world-after": {
+      "classification": "PUBLIC",
+      "label": "The World After",
+      "subtitle": "Survival in a fractured Central Texas-inspired region",
+      "img": "assets/world-board.png",
+      "chip": "PUBLIC LORE · APPROVED DIRECTION",
+      "title": "The World After",
+      "body": "THE LONG AFTER unfolds across an original Central Texas-inspired region shaped by abandoned infrastructure, surviving communities, dangerous routes, and spaces where civilization thins into frontier and wilderness.",
+      "facts": [["REGION", "Central Texas inspired"], ["STRUCTURE", "Civilization → Frontier → Wilderness → Dead Zones"], ["DISCLOSURE", "Spoiler-safe"]],
+      "details": {
+        "Overview": "The world is fictional rather than a one-to-one recreation of a real city. Familiar climate, terrain, highways, waterways, urban density, and Hill Country character provide the regional language.",
+        "Survival": "The environment is meant to feel used, damaged, and still changing. Routes, settlements, abandoned structures, and dangerous spaces support the player's survival story.",
+        "Mysteries": "Major infection truths, hidden identities, endgame revelations, and protected story answers are intentionally withheld from the public archive."
+      }
+    },
+    "alamo-falls": {
+      "classification": "PUBLIC",
+      "label": "Alamo Falls",
+      "subtitle": "The primary fictional metro",
+      "img": "assets/world-board.png",
+      "chip": "PUBLIC LORE · WORLD",
+      "title": "Alamo Falls",
+      "body": "Alamo Falls is the primary fictional metro anchoring the region: an urban center surrounded by highways, waterways, outer districts, service corridors, green spaces, and the broken connections of the post-collapse world.",
+      "facts": [["TYPE", "Fictional metro"], ["ROLE", "Regional anchor"], ["STATUS", "Approved direction"]],
+      "details": {
+        "Overview": "Alamo Falls gives the game a recognizable regional scale without reproducing Austin or another real city one-to-one.",
+        "Districts": "Urban core, outer districts, infrastructure corridors, waterways, parks, and surrounding development can expand as separate locations as they are approved.",
+        "Public Record": "Only locations and history cleared for player-facing release belong in this archive."
+      }
+    },
+    "haven-ridge": {
+      "classification": "PUBLIC",
+      "label": "Haven Ridge",
+      "subtitle": "Containment-settlement and Micro integration area",
+      "img": "assets/lone-cedar.png",
+      "chip": "PUBLIC LORE · LOCATION",
+      "title": "Haven Ridge",
+      "body": "Haven Ridge is a settlement organized around a containment-facility area and the service spaces that grew around it. Its roads, wards, yards, approaches, and overlooks form one of the region's important survival spaces.",
+      "facts": [["TYPE", "Containment-settlement"], ["ROLE", "Micro integration area"], ["STATUS", "Approved direction"]],
+      "details": {
+        "Overview": "Haven Ridge includes spaces such as Ridge Gate, Service Yard, Haven Commons, Medical Ward, Containment Wing, South Approach, Old Calder Road, and Ridge Overlook.",
+        "Identity": "The settlement name does not establish ownership by a faction unless Story & Lore later approves and publicly releases that relationship.",
+        "Disclosure": "Deeper history remains withheld until its narrative release is approved."
+      }
+    },
+    "opening": {
+      "classification": "PUBLIC",
+      "label": "The Opening",
+      "subtitle": "Story and tutorial move together",
+      "img": "assets/diner.png",
+      "chip": "PUBLIC LORE · MICRO",
+      "title": "The Opening",
+      "body": "The Micro begins inside a damaged former family apartment. Control arrives almost immediately, and the player learns movement, survival needs, interaction, traversal, and escape pressure through events that belong to the story instead of a separate training room.",
+      "facts": [["FORMAT", "Real-time / diegetic"], ["FOCUS", "Story-driven learning"], ["SPOILERS", "Protected"]],
+      "details": {
+        "Direction": "The story is the tutorial: obstacles should exist because they make sense in the character's situation, then teach the mechanic naturally.",
+        "Interaction": "World interaction is built around seeing and focusing on an object, using a fast primary action, and exposing additional contextual actions when needed.",
+        "Pressure": "Early lessons are introduced calmly where possible and then tested under pressure as the escape intensifies. Exact story triggers and protected character revelations remain sealed."
+      }
+    },
+    "sealed": {
+      "classification": "PUBLIC",
+      "label": "Sealed Archives",
+      "subtitle": "Protected story records",
+      "img": "assets/promo-pack.png",
+      "chip": "PUBLIC TEASER · REDACTED",
+      "title": "Sealed Archives",
+      "body": "Some records are deliberately withheld. They contain story answers, identities, infection truths, and late-game revelations that are meant to be discovered in THE LONG AFTER—not read on its website.",
+      "facts": [["ACCESS", "REDACTED"], ["CONTENTS", "Withheld"], ["RELEASE", "Story discovery only"]],
+      "details": {
+        "Notice": "This public entry contains no hidden lore payload. The protected material itself is never shipped to the public website repository.",
+        "Policy": "Public lore is curated separately from internal narrative records. Missing release approval means the material stays sealed.",
+        "Archive": "When a protected fact is intentionally revealed to players, Story & Lore can promote a spoiler-safe version into the public archive."
+      }
+    }
+  }
+}
