@@ -137,6 +137,22 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
 
+
+/* PASS 3 — public content hierarchy */
+.rail-top{padding:28px 24px 24px}
+.rail-top h2{margin-top:12px}
+.rail-top p{max-width:28ch;font-size:12px;line-height:1.65}
+.item-tab small{opacity:.82}
+.workspace-copy{font-size:14px}
+.chip{backdrop-filter:blur(8px)}
+@media(max-width:900px){
+ .rail-top p{max-width:60ch}
+ .rail{background:rgba(7,12,9,.9)}
+ .item-tabs{gap:6px}
+ .item-tab{border:1px solid var(--line);border-left:2px solid transparent;background:rgba(255,255,255,.018)}
+ .item-tab.active{border-color:rgba(183,255,60,.25);border-left-color:var(--acid)}
+}
+
 </style>
 </head>
 <body>
@@ -179,7 +195,7 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="world">
-      <div class="hub" data-group="world"><aside class="rail"><div class="rail-top"><div class="micro-label">Explore</div><h2>World</h2><p>Choose a place or world family. The center screen changes completely with each selection.</p></div><div class="item-tabs">
+      <div class="hub" data-group="world"><aside class="rail"><div class="rail-top"><div class="micro-label">Explore the setting</div><h2>World</h2><p>Discover the places, routes and environmental structure shaping THE LONG AFTER.</p></div><div class="item-tabs">
         <button class="item-tab active" data-item="alamo"><strong>Alamo Falls</strong><small>Primary fictional metro</small></button>
         <button class="item-tab" data-item="haven"><strong>Haven Ridge</strong><small>Containment-settlement area</small></button>
         <button class="item-tab" data-item="route17"><strong>State Route 17</strong><small>Regional road network</small></button>
@@ -188,7 +204,7 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="arsenal">
-      <div class="hub" data-group="arsenal"><aside class="rail"><div class="rail-top"><div class="micro-label">Equipment</div><h2>Arsenal</h2><p>Each weapon family opens its own dedicated workspace with room for future variants.</p></div><div class="item-tabs">
+      <div class="hub" data-group="arsenal"><aside class="rail"><div class="rail-top"><div class="micro-label">Survival equipment</div><h2>Gear</h2><p>Explore approved and in-development equipment concepts. Concept material is clearly labeled and may change before release.</p></div><div class="item-tabs">
         <button class="item-tab active" data-item="smg"><strong>SMG</strong><small>Compact weapon concept</small></button>
         <button class="item-tab" data-item="sidearm"><strong>Sidearm</strong><small>Handgun family concept</small></button>
         <button class="item-tab" data-item="shotgun"><strong>Pump Shotgun</strong><small>Close-range weapon concept</small></button>
@@ -199,7 +215,7 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="vehicles">
-      <div class="hub" data-group="vehicles"><aside class="rail"><div class="rail-top"><div class="micro-label">Mobility</div><h2>Vehicles</h2><p>Vehicle families stay organized so individual models and variants can expand without clutter.</p></div><div class="item-tabs">
+      <div class="hub" data-group="vehicles"><aside class="rail"><div class="rail-top"><div class="micro-label">Mobility</div><h2>Vehicles</h2><p>Explore the vehicle and machinery direction supporting traversal, atmosphere and the working world.</p></div><div class="item-tabs">
         <button class="item-tab active" data-item="utility"><strong>Utility Vehicle</strong><small>Traversal vehicle concept</small></button>
         <button class="item-tab" data-item="excavator"><strong>Excavator</strong><small>Heavy construction prop</small></button>
         <button class="item-tab" data-item="bulldozer"><strong>Bulldozer</strong><small>Heavy construction prop</small></button>
@@ -213,7 +229,7 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="audio">
-      <div class="hub" data-group="audio"><aside class="rail"><div class="rail-top"><div class="micro-label">Sound</div><h2>Audio</h2><p>Audio is presented by gameplay family, with production status and provenance kept clear.</p></div><div class="item-tabs">
+      <div class="hub" data-group="audio"><aside class="rail"><div class="rail-top"><div class="micro-label">Media</div><h2>Sound & Atmosphere</h2><p>Explore the developing soundscape of footsteps, environments, weather, combat and infected encounters.</p></div><div class="item-tabs">
         <button class="item-tab active" data-item="footsteps"><strong>Footsteps</strong><small>Surface families and similarity QC</small></button>
         <button class="item-tab" data-item="environment"><strong>Environment</strong><small>Ambience, weather and place</small></button>
         <button class="item-tab" data-item="combat"><strong>Combat & Infected</strong><small>Gameplay event integration</small></button>
@@ -221,7 +237,7 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="roadmap">
-      <div class="roadmap-grid"><article class="roadmap-main"><div class="micro-label">Micro / Prototype</div><h2>Road to Micro 0.1.0</h2><p>Five locked execution groups. Dates below are planning estimates from the current ETA model, not contractual release promises.</p><div class="project-gauge" style="margin:22px 0 8px;padding:18px;border:1px solid var(--line2);background:rgba(183,255,60,.035)"><div style="display:flex;justify-content:space-between;align-items:end;gap:20px"><div><div class="micro-label">Current active phase</div><div style="font-size:22px;font-weight:900;margin-top:10px">Foundation completion</div></div><strong style="font-size:42px;line-height:1;color:var(--acid)">75%</strong></div><div class="bar" style="height:10px;margin-top:16px"><i style="width:75%"></i></div><div style="margin-top:9px;color:var(--muted);font-size:11px">3 of 4 Foundation gates complete · Micro Smoke Test remains active.</div></div>
+      <div class="roadmap-grid"><article class="roadmap-main"><div class="micro-label">Development</div><h2>Road to Micro 0.1.0</h2><p>Follow the major development stages leading toward the first focused playable milestone. Internal schedules remain estimates and can change as testing progresses.</p><div class="project-gauge" style="margin:22px 0 8px;padding:18px;border:1px solid var(--line2);background:rgba(183,255,60,.035)"><div style="display:flex;justify-content:space-between;align-items:end;gap:20px"><div><div class="micro-label">Current active phase</div><div style="font-size:22px;font-weight:900;margin-top:10px">Foundation completion</div></div><strong style="font-size:42px;line-height:1;color:var(--acid)">75%</strong></div><div class="bar" style="height:10px;margin-top:16px"><i style="width:75%"></i></div><div style="margin-top:9px;color:var(--muted);font-size:11px">3 of 4 Foundation gates complete · Micro Smoke Test remains active.</div></div>
       <div class="phases">
         <div class="phase active"><div class="phase-num">01</div><div class="phase-title">Foundation</div><div class="phase-state">ACTIVE · 3/4</div><div class="phase-focus">Close regression smoke-test proof.</div></div>
         <div class="phase"><div class="phase-num">02</div><div class="phase-title">Core Survival Loop</div><div class="phase-state">LOCKED</div><div class="phase-focus">Controller, combat, survival, inventory and infected perception.</div></div>
