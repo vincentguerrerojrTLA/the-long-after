@@ -188,6 +188,15 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
 .screen:not([data-view="home"])>.screen-bg,
 .screen:not([data-view="home"]) .screen-bg{background-image:none!important;opacity:0!important}
 
+
+/* Dedicated artwork stage: no captions, controls, chips or copy may overlap the image plane. */
+.workspace-bg>*{display:none!important}
+.workspace-bg{overflow:hidden!important}
+.workspace-body{isolation:isolate}
+@media(max-width:900px){
+ .workspace-bg{background-size:contain!important;background-position:center center!important}
+}
+
 </style>
 </head>
 <body>
