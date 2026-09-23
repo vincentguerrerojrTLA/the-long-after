@@ -1,48 +1,72 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "classification": "PUBLIC",
-  "updatedAt": "2026-09-21T14:25:00Z",
+  "updatedAt": "2026-09-23T10:35:00Z",
   "project": "THE LONG AFTER",
   "mode": "public-project-mirror",
   "releasePolicy": "Only information explicitly cleared for public release may appear in this file.",
   "sync": {
     "status": "LIVE",
-    "pollSeconds": 15,
-    "authoritativeSource": "Notion project records",
+    "pollSeconds": 30,
     "publicMirror": "GitHub Pages",
-    "note": "Only PUBLIC-cleared website information is mirrored here. Internal, Classified, Black, and unclassified material is omitted."
+    "note": "Only PUBLIC-cleared website information is mirrored here. Internal schedules, ticker details, percentages, blockers, and unclassified material are omitted."
   },
-  "release": {
-    "label": "MICRO RELEASE WINDOW",
-    "status": "PLANNING",
-    "estimatedDropLabel": "Estimated Micro Drop",
-    "estimatedDrop": "NOVEMBER 2026",
-    "window": "Working window · Nov 2–Nov 30, 2026",
-    "fastPath": "Oct 19–Nov 2",
-    "planningTarget": "Nov 2–Nov 30",
-    "riskCase": "Nov 30–Dec 28"
-  },
-  "active": {
-    "ticker": "Micro Smoke Test",
-    "phaseId": "foundation",
-    "phaseNumber": "01",
-    "phaseTitle": "Foundation",
-    "completedGates": 3,
-    "totalGates": 4,
-    "focus": "Close regression smoke-test proof.",
-    "note": "Current public roadmap status. Schedule re-baselines when a phase closes or a publicly disclosed material blocker changes."
+  "milestone": {
+    "label": "MICRO 0.1.0",
+    "status": "IN DEVELOPMENT",
+    "focus": "Foundation & validation",
+    "description": "The first focused playable milestone for THE LONG AFTER. Scope and timing may change as implementation and testing progress."
   },
   "activity": [
-    {"kind": "ACTIVE", "text": "Micro Smoke Test"},
-    {"kind": "APPROVED", "text": "Environment direction"},
-    {"kind": "PLANNING", "text": "Nov 2026 Micro window"}
+    {
+      "kind": "WORLD",
+      "text": "Original fictional setting in development"
+    },
+    {
+      "kind": "GAMEPLAY",
+      "text": "Core survival systems in development"
+    },
+    {
+      "kind": "STATUS",
+      "text": "Public development preview"
+    }
   ],
   "phases": [
-    {"id": "foundation", "number": "01", "title": "Foundation", "state": "ACTIVE", "completed": 3, "total": 4, "focus": "Close regression smoke-test proof."},
-    {"id": "core-survival-loop", "number": "02", "title": "Core Survival Loop", "state": "LOCKED", "focus": "Controller, combat, survival, inventory and infected perception."},
-    {"id": "world-coop", "number": "03", "title": "World & Co-op", "state": "LOCKED", "focus": "Metrics, Level 1, streaming seams, biome transition and 1–4 direct-host seams."},
-    {"id": "content-atmosphere", "number": "04", "title": "Content & Atmosphere", "state": "LOCKED", "focus": "Final Micro visual/audio/environment content and QC."},
-    {"id": "release-readiness", "number": "05", "title": "Release Readiness", "state": "LOCKED", "focus": "Integration, performance, save/load, playtest and approval."}
+    {
+      "id": "foundation",
+      "number": "01",
+      "title": "Foundation",
+      "state": "IN DEVELOPMENT",
+      "focus": "Core architecture, validation and regression coverage."
+    },
+    {
+      "id": "core-survival-loop",
+      "number": "02",
+      "title": "Core Survival Loop",
+      "state": "QUEUED",
+      "focus": "Controller, combat, survival, inventory and infected perception."
+    },
+    {
+      "id": "world-coop",
+      "number": "03",
+      "title": "World & Co-op",
+      "state": "QUEUED",
+      "focus": "World metrics, environment integration and co-op foundations."
+    },
+    {
+      "id": "content-atmosphere",
+      "number": "04",
+      "title": "Content & Atmosphere",
+      "state": "QUEUED",
+      "focus": "Visual, audio and environmental content integration."
+    },
+    {
+      "id": "release-readiness",
+      "number": "05",
+      "title": "Release Readiness",
+      "state": "EVIDENCE GATED",
+      "focus": "Integration, performance, persistence, playtesting and approval."
+    }
   ],
   "catalog": {
     "world": {},
