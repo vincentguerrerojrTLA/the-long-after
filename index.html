@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="./tla-favicon-32.png?v=4" />
 <link rel="icon" type="image/png" sizes="64x64" href="./tla-favicon-64.png?v=4" />
 <link rel="shortcut icon" href="./tla-favicon-32.png?v=4" />
-<title>THE LONG AFTER — Micro Playable</title>
+<title>THE LONG AFTER — Official Project Site</title>
 <style>
 :root{
   --bg:#060907;--panel:rgba(8,13,10,.78);--panel-strong:rgba(8,13,10,.92);
@@ -65,6 +65,78 @@ button{font:inherit}.app{height:100%;position:relative;isolation:isolate;backgro
 .roadmap-grid{height:100%;max-width:1500px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:30px}.roadmap-main,.eta-card{border:1px solid var(--line);background:rgba(7,12,9,.82);box-shadow:var(--shadow);backdrop-filter:blur(16px)}.roadmap-main{padding:29px 30px;overflow:auto}.roadmap-main h2{font-size:52px;letter-spacing:-.045em;margin:12px 0 8px}.roadmap-main>p{color:#b7c0b8;font-size:13px;line-height:1.55;max-width:720px}.phases{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:8px;margin-top:25px}.phase{padding:15px 14px;border:1px solid var(--line);background:rgba(255,255,255,.018);min-height:150px}.phase.active{border-color:rgba(183,255,60,.34);background:rgba(183,255,60,.045)}.phase-num{font:800 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--muted);letter-spacing:.1em}.phase-title{font-weight:900;font-size:14px;margin:15px 0 7px}.phase-state{font:700 9px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--acid);letter-spacing:.08em}.phase-focus{font-size:11px;line-height:1.45;color:#aeb7af;margin-top:11px}.eta-card{padding:25px 24px}.eta-card h3{margin:6px 0 18px;font-size:15px}.eta-card .month{font-size:47px;line-height:.92;font-weight:950;letter-spacing:-.045em;text-transform:uppercase}.eta-card .window{color:#cbd2cc;margin-top:12px;font-size:12px}.eta-card .bands{margin-top:21px;padding-top:14px;border-top:1px solid var(--line)}.eta-card .bands div{display:flex;justify-content:space-between;font-size:11px;padding:8px 0;color:#aeb7b0}.eta-card .bands b{color:#e6ebe6}.eta-card .bands .target b{color:var(--acid)}.disclaimer{font-size:10px;line-height:1.55;color:#8f9991;margin-top:18px}
 @media(max-width:1080px){header{grid-template-columns:1fr auto}.primary-nav{position:absolute;top:76px;left:0;right:0;height:54px;background:rgba(5,9,7,.92);border-bottom:1px solid var(--line);justify-content:center}.nav{height:54px;padding:0 10px}.head-right{display:none}.stage{top:130px}.screen{padding:24px}.home-grid{grid-template-columns:1fr 330px}.hero h1{font-size:72px}.hub{grid-template-columns:260px 1fr}.workspace-body{padding:30px}.phases{grid-template-columns:repeat(2,1fr)}.roadmap-grid{grid-template-columns:1fr 330px}}
 @media(max-width:760px){.launch-index{grid-template-columns:1fr 1fr}.launch-card{height:90px}.launch-card:last-child{grid-column:1/-1}body{overflow:auto}.app{min-height:100%;height:auto}.stage{position:relative;top:54px;min-height:calc(100vh - 130px)}header{height:62px;padding:0 16px;grid-template-columns:1fr}.brand small{display:none}.primary-nav{top:62px;height:52px;overflow-x:auto;justify-content:flex-start}.nav{height:52px;white-space:nowrap}.screen{position:relative;display:none;min-height:calc(100vh - 114px);padding:20px 16px}.screen.active{display:block}.home-grid,.hub,.roadmap-grid{display:block;height:auto}.hero{padding:40px 0 20px}.hero h1{font-size:58px}.release-card{margin-top:20px}.rail{margin-bottom:12px}.item-tabs{display:grid;grid-template-columns:1fr 1fr}.workspace{min-height:620px}.workspace-body{padding:26px 20px}.facts{grid-template-columns:1fr}.roadmap-main{margin-bottom:14px}.phases{grid-template-columns:1fr}.eta-card{margin-bottom:30px}}
+
+/* 2026-09-23 WEBSITE MODERNIZATION PASS 1
+   Public-facing polish: stronger hierarchy, quieter development chrome,
+   responsive navigation, touch-safe controls, and reduced-motion support. */
+:root{--site-max:1560px;--header-h:72px}
+html{background:#050806}
+body{min-width:320px}
+header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-columns:minmax(190px,1fr) auto minmax(150px,1fr);background:linear-gradient(180deg,rgba(4,7,5,.94),rgba(4,7,5,.76));box-shadow:0 12px 36px rgba(0,0,0,.22)}
+.nav{height:var(--header-h);padding-inline:clamp(10px,1.2vw,18px)}
+.stage{top:var(--header-h)}
+.screen{padding:clamp(22px,3vw,46px)}
+.brand-title{font-size:26px}
+.hero{padding-bottom:clamp(24px,5vh,60px)}
+.home-grid{grid-template-columns:minmax(0,1fr) minmax(300px,360px);gap:clamp(24px,4vw,64px);max-width:var(--site-max)}
+.locked-title{border-bottom-color:rgba(228,170,103,.18)}
+.locked-main{font-size:clamp(64px,8.4vw,138px)}
+.tagline{max-width:620px;font-size:clamp(15px,1.25vw,19px);color:#d8ddd8}
+.hero-actions{margin-top:30px}
+.btn{min-height:44px;border-radius:2px;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.btn:hover{transform:translateY(-1px);border-color:rgba(183,255,60,.55)}
+.release-card{opacity:.92;box-shadow:0 24px 70px rgba(0,0,0,.38)}
+.launch-index{grid-template-columns:repeat(5,minmax(100px,1fr));gap:10px}
+.launch-card{height:104px}
+.activity-strip{opacity:.82}
+.site-disclaimer{bottom:8px;max-width:760px;background:rgba(4,8,6,.82);font-size:8px}
+.hub{max-width:var(--site-max);grid-template-columns:minmax(250px,310px) minmax(0,1fr)}
+.rail,.workspace,.roadmap-main,.eta-card{border-color:rgba(230,237,228,.13)}
+.item-tab{min-height:52px}
+.item-tab:focus-visible,.nav:focus-visible,.btn:focus-visible,.launch-card:focus-visible,.brand-lock:focus-visible{outline:2px solid var(--acid);outline-offset:2px}
+@media(max-width:1180px){
+  header{grid-template-columns:1fr auto}.head-right{display:none}
+  .home-grid{grid-template-columns:minmax(0,1fr) 320px}
+  .launch-index{grid-template-columns:repeat(3,minmax(110px,1fr))}
+}
+@media(max-width:900px){
+  html,body{overflow:auto}
+  .app{min-height:100dvh;height:auto}
+  header{position:sticky;top:0;height:auto;min-height:64px;grid-template-columns:1fr;gap:0;padding:10px 16px}
+  .brand{justify-content:center;padding:4px 0 10px}
+  .brand small{display:none}
+  .primary-nav{width:100%;overflow-x:auto;justify-content:flex-start;scrollbar-width:none;border-top:1px solid var(--line)}
+  .primary-nav::-webkit-scrollbar{display:none}
+  .nav{height:48px;flex:0 0 auto;padding:0 14px}
+  .stage{position:relative;top:auto;min-height:calc(100dvh - 112px)}
+  .screen{position:relative;display:none;min-height:calc(100dvh - 112px);padding:24px 18px 70px}
+  .screen.active{display:block}
+  .home-grid{height:auto;display:block}
+  .hero{padding:8vh 0 30px}
+  .release-card{max-width:620px;margin:0 0 28px}
+  .launch-index{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hub{height:auto;display:block}
+  .rail{margin-bottom:14px;max-height:none}
+  .item-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible}
+  .workspace{min-height:680px}
+  .roadmap-grid{height:auto;display:block}.eta-card{margin-top:14px}
+  .site-disclaimer{position:relative;left:auto;bottom:auto;transform:none;width:calc(100% - 24px);margin:12px auto}
+}
+@media(max-width:560px){
+  .brand-title{font-size:23px}
+  .locked-main{font-size:clamp(54px,18vw,82px)}
+  .locked-silhouette{display:none}
+  .launch-index{grid-template-columns:1fr 1fr}
+  .launch-card{height:92px}
+  .item-tabs{grid-template-columns:1fr}
+  .workspace{min-height:620px}
+  .facts{grid-template-columns:1fr}
+  .hero-actions .btn{flex:1 1 100%}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
+}
+
 </style>
 </head>
 <body>
