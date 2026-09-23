@@ -160,15 +160,15 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
   <div class="bg" id="bg"></div><div class="veil"></div><div class="grain"></div>
   <header>
     <button class="brand brand-lock" data-jump="home" aria-label="THE LONG AFTER home"><img src="assets/THE_LONG_AFTER_FINAL_TITLE.png" alt="THE LONG AFTER" style="display:block;width:210px;max-height:64px;object-fit:contain;object-position:left center"></button>
-    <nav class="primary-nav">
-      <button class="nav active" data-view="home">Home</button>
-      <button class="nav" data-view="world">World</button>
-      <button class="nav" data-view="arsenal">Gear</button>
-      <button class="nav" data-view="vehicles">Vehicles</button>
-      <button class="nav" data-view="audio">Media</button>
-      <button class="nav" data-view="roadmap">Development</button>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <button type="button" class="nav active" data-view="home">Home</button>
+      <button type="button" class="nav" data-view="world">World</button>
+      <button type="button" class="nav" data-view="arsenal">Gear</button>
+      <button type="button" class="nav" data-view="vehicles">Vehicles</button>
+      <button type="button" class="nav" data-view="audio">Media</button>
+      <button type="button" class="nav" data-view="roadmap">Development</button>
     </nav>
-    <div class="head-right"><div class="eta-pill">MICRO · NOV 2026 EST.</div><div class="live">● IN DEVELOPMENT</div></div>
+    <div class="head-right"><div class="eta-pill">MICRO 0.1.0</div><div class="live">● IN DEVELOPMENT</div></div>
   </header>
   <main class="stage">
     <section class="screen active" data-screen="home">
@@ -237,15 +237,15 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
     </section>
 
     <section class="screen" data-screen="roadmap">
-      <div class="roadmap-grid"><article class="roadmap-main"><div class="micro-label">Development</div><h2>Road to Micro 0.1.0</h2><p>Follow the major development stages leading toward the first focused playable milestone. Internal schedules remain estimates and can change as testing progresses.</p><div class="project-gauge" style="margin:22px 0 8px;padding:18px;border:1px solid var(--line2);background:rgba(183,255,60,.035)"><div style="display:flex;justify-content:space-between;align-items:end;gap:20px"><div><div class="micro-label">Current active phase</div><div style="font-size:22px;font-weight:900;margin-top:10px">Foundation completion</div></div><strong style="font-size:42px;line-height:1;color:var(--acid)">75%</strong></div><div class="bar" style="height:10px;margin-top:16px"><i style="width:75%"></i></div><div style="margin-top:9px;color:var(--muted);font-size:11px">3 of 4 Foundation gates complete · Micro Smoke Test remains active.</div></div>
+      <div class="roadmap-grid"><article class="roadmap-main"><div class="micro-label">Development</div><h2>Road to Micro 0.1.0</h2><p>Follow the major development stages leading toward the first focused playable milestone. Internal schedules remain estimates and can change as testing progresses.</p><div class="project-gauge" style="margin:22px 0 8px;padding:18px;border:1px solid var(--line2);background:rgba(183,255,60,.035)"><div class="micro-label">Current focus</div><div style="font-size:22px;font-weight:900;margin-top:10px">Foundation & validation</div><div style="margin-top:9px;color:var(--muted);font-size:11px;line-height:1.55">Core systems are being built, tested and stabilized before the Micro expands into later development stages.</div></div>
       <div class="phases">
-        <div class="phase active"><div class="phase-num">01</div><div class="phase-title">Foundation</div><div class="phase-state">ACTIVE · 3/4</div><div class="phase-focus">Close regression smoke-test proof.</div></div>
+        <div class="phase active"><div class="phase-num">01</div><div class="phase-title">Foundation</div><div class="phase-state">IN DEVELOPMENT</div><div class="phase-focus">Core architecture, validation and regression coverage.</div></div>
         <div class="phase"><div class="phase-num">02</div><div class="phase-title">Core Survival Loop</div><div class="phase-state">LOCKED</div><div class="phase-focus">Controller, combat, survival, inventory and infected perception.</div></div>
         <div class="phase"><div class="phase-num">03</div><div class="phase-title">World & Co-op</div><div class="phase-state">LOCKED</div><div class="phase-focus">Metrics, Level 1, streaming seams, biome transition and 1–4 direct-host seams.</div></div>
         <div class="phase"><div class="phase-num">04</div><div class="phase-title">Content & Atmosphere</div><div class="phase-state">LOCKED</div><div class="phase-focus">Final Micro visual/audio/environment content and QC.</div></div>
         <div class="phase"><div class="phase-num">05</div><div class="phase-title">Release Readiness</div><div class="phase-state">LOCKED</div><div class="phase-focus">Integration, performance, save/load, playtest and approval.</div></div>
       </div></article>
-      <aside class="eta-card"><div class="micro-label">Public target</div><h3>Estimated Micro Drop</h3><div class="month">November<br>2026</div><div class="window">Working release window · Nov 2–Nov 30</div><div class="bands"><div><span>Fast path</span><b>Oct 19–Nov 2</b></div><div class="target"><span>Planning target</span><b>Nov 2–Nov 30</b></div><div><span>Risk case</span><b>Nov 30–Dec 28</b></div></div><div class="disclaimer">Planning estimate based on remaining work and current evidence. Re-baseline when a ticker closes, a material blocker appears, or scope changes.</div></aside>
+      <aside class="eta-card"><div class="micro-label">First playable milestone</div><h3>Micro 0.1.0</h3><div class="month">IN<br>DEVELOPMENT</div><div class="window">Focused playable milestone</div><div class="bands"><div><span>Foundation</span><b>Active</b></div><div><span>Core survival loop</span><b>Queued</b></div><div class="target"><span>Release readiness</span><b>Evidence gated</b></div></div><div class="disclaimer">Public development status is intentionally milestone-based. Dates and scope can change as implementation and testing produce new evidence.</div></aside>
       </div>
     </section>
   </main>
