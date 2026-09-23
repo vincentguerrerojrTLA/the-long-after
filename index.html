@@ -153,6 +153,56 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
  .item-tab.active{border-color:rgba(183,255,60,.25);border-left-color:var(--acid)}
 }
 
+
+/* VISUAL-FIRST CLEANUP — artwork remains readable and unobstructed */
+.workspace{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(330px,.55fr)!important;align-items:stretch!important;overflow:hidden}
+.workspace-bg{position:relative!important;inset:auto!important;min-height:100%!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;background-color:#050806!important;opacity:1!important;filter:none!important}
+.workspace-bg:after{display:none!important}
+.workspace-body{position:relative!important;z-index:2!important;align-self:stretch!important;max-width:none!important;padding:clamp(24px,3vw,48px)!important;background:linear-gradient(180deg,rgba(8,13,10,.98),rgba(5,9,7,.96))!important;border-left:1px solid var(--line2);overflow:auto}
+.workspace-copy,.detail{max-width:58ch}
+.launch-card{overflow:hidden}
+.launch-card .card-bg{background-size:cover!important;background-position:center!important;opacity:.88!important}
+.launch-card:after{background:linear-gradient(180deg,transparent 42%,rgba(4,8,6,.92) 100%)!important}
+.launch-card .card-content{align-self:end;background:rgba(5,9,7,.78);backdrop-filter:blur(8px);padding:12px 14px;margin:0 -2px -2px}
+@media(max-width:900px){
+ .workspace{grid-template-columns:1fr!important;grid-template-rows:minmax(300px,52vh) auto!important}
+ .workspace-bg{min-height:300px!important}
+ .workspace-body{border-left:0;border-top:1px solid var(--line2);overflow:visible}
+}
+@media(max-width:560px){
+ .workspace{grid-template-rows:minmax(250px,44vh) auto!important}
+ .workspace-bg{min-height:250px!important}
+}
+
+
+/* ARTWORK VIEWER CLEANUP */
+.visual-art,.hero-art,.item-art{position:relative;isolation:isolate}
+.visual-art img,.hero-art img,.item-art img{display:block;width:100%;height:auto;object-fit:contain}
+.workspace-bg{cursor:zoom-in}
+.workspace-bg:hover{transform:scale(.995)}
+.workspace-bg{transition:transform .18s ease}
+@media(prefers-reduced-motion:reduce){.workspace-bg{transition:none!important}.workspace-bg:hover{transform:none!important}}
+
+
+/* Do not reuse catalog artwork as UI wallpaper on content screens. */
+.screen:not([data-view="home"])>.screen-bg,
+.screen:not([data-view="home"]) .screen-bg{background-image:none!important;opacity:0!important}
+
+
+/* Dedicated artwork stage: no captions, controls, chips or copy may overlap the image plane. */
+.workspace-bg>*{display:none!important}
+.workspace-bg{overflow:hidden!important}
+.workspace-body{isolation:isolate}
+@media(max-width:900px){
+ .workspace-bg{background-size:contain!important;background-position:center center!important}
+}
+
+
+/* Consistent visual-stage sizing prevents UI from squeezing approved artwork. */
+.workspace-bg{aspect-ratio:16/10!important;width:100%!important;min-width:0!important}
+@media(min-width:901px){.workspace{min-height:min(720px,72vh)!important}.workspace-bg{aspect-ratio:auto!important}}
+@media(max-width:900px){.workspace-body{max-height:none!important}}
+
 </style>
 </head>
 <body>
@@ -284,7 +334,7 @@ audio:{
  environment:{img:'assets/diner.png',chip:'AUDIO DIRECTION',title:'Environment',body:'Ambient sound should reinforce place, weather, structure and distance without masking gameplay cues. External reference material does not become a shipping asset without exact rights provenance.',facts:[['ROLE','Place + atmosphere'],['RIGHTS','Traceable source required'],['STATUS','In progress']],details:{Overview:'Wind and other calibration material can inform direction while remaining outside the shipping package.',Rights:'Unknown or ambiguous third-party rights default to HOLD — DO NOT SHIP.',Implementation:'Final event hooks and in-game balance remain part of release QA.'}},
  combat:{img:'assets/promo-pack.png',chip:'MICRO INTEGRATION TARGET',title:'Combat & Infected',body:'Weapon, impact, infected and interaction audio belongs to the gameplay event system, not just an asset folder. The final Micro set must be integrated, provenance-safe and checked in the exported build.',facts:[['HOOKS','Gameplay-event driven'],['QC','Similarity + rights'],['STATUS','Integration pending']],details:{Overview:'The authoritative production package stays separate from temporary review and calibration sources.',Release:'Only approved/licensed audio belongs in the tested release package.',Future:'Larger infected and weapon families can expand later under their own screens.'}}
 }}
-const BGS={home:'assets/lone-cedar.png',world:'assets/world-board.png',arsenal:'assets/smg.png',vehicles:'assets/vehicles.png',audio:'assets/diner.png',roadmap:'assets/promo-pack.png'};
+const BGS={home:'assets/lone-cedar.png'}; // Section art is shown in dedicated unobstructed viewers, not behind UI.
 const state={view:'home',item:{world:'alamo',arsenal:'smg',vehicles:'utility',audio:'footsteps'},detail:{}};
 function render(group){const item=DATA[group][state.item[group]];const root=document.getElementById('workspace-'+group);const keys=Object.keys(item.details);let d=state.detail[group];if(!keys.includes(d))d=keys[0];state.detail[group]=d;root.querySelector('.workspace-bg').style.backgroundImage=`url('${item.img}')`;root.querySelector('.workspace-body').innerHTML=`<div class="chip ${item.chipClass||''}">${item.chip}</div><h3>${item.title}</h3><div class="workspace-copy">${item.body}</div><div class="subnav">${keys.map(k=>`<button class="${k===d?'active':''}" data-detail="${k}" data-detail-group="${group}">${k}</button>`).join('')}</div><div class="detail">${item.details[d]}</div><div class="facts">${item.facts.map(f=>`<div class="fact"><b>${f[0]}</b><span>${f[1]}</span></div>`).join('')}</div>`}
 function setView(view,push=true){if(!document.querySelector(`[data-screen="${view}"]`))view='home';state.view=view;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.dataset.screen===view));document.querySelectorAll('.nav').forEach(n=>n.classList.toggle('active',n.dataset.view===view));document.getElementById('bg').style.backgroundImage=`url('${BGS[view]}')`;if(DATA[view])render(view);if(push)history.pushState({},'',`#/${view}${DATA[view]?'/'+state.item[view]:''}`)}
