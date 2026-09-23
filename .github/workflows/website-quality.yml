@@ -35,10 +35,7 @@ jobs:
               except Exception as e: failures.append(f"{p}: HTML parse error {e}")
               required=['<meta name="viewport"','<meta name="description"','<title>','<main']
               missing=[x for x in required if x.lower() not in text.lower()]
-              if p.name=="index.html":
-                  has_primary=('<h1' in text.lower()) or ('class="hero-title"' in text.lower() and 'alt="THE LONG AFTER"' in text)
-              else:
-                  has_primary='<h1' in text.lower()
+              has_primary='<h1' in text.lower()
               if not has_primary: missing.append("primary page heading")
               if missing: failures.append(f"{p}: missing {missing}")
               title=re.search(r"<title>(.*?)</title>",text,re.I|re.S)
