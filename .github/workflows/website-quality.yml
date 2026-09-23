@@ -2,13 +2,13 @@ name: Website Quality
 on:
   pull_request:
     paths:
-      - "index.html"
+      - "*.html"
       - "assets/**"
       - ".github/workflows/website-quality.yml"
   push:
     branches: [main]
     paths:
-      - "index.html"
+      - "*.html"
       - "assets/**"
       - ".github/workflows/website-quality.yml"
 permissions:
@@ -24,17 +24,29 @@ jobs:
           from html.parser import HTMLParser
           from pathlib import Path
           import re, sys
-          p=Path("index.html")
-          text=p.read_text(encoding="utf-8")
-          class P(HTMLParser): pass
-          P().feed(text)
-          required=['<meta name="viewport"','<meta name="description"','<title>','<main','<h1']
-          missing=[x for x in required if x.lower() not in text.lower()]
-          refs=re.findall(r'(?:src|href)=["\']([^"\'#?]+)',text,re.I)
-          local=[r[2:] if r.startswith("./") else r for r in refs if not re.match(r'^(?:https?:|mailto:|tel:|data:)',r)]
-          broken=[r for r in local if r and not Path(r).exists()]
-          forbidden=["PRIVATE KEY","Bearer ","api_key","access_token"]
-          leaks=[x for x in forbidden if x in text]
-          if missing or broken or leaks:
-              print("missing:",missing); print("broken:",broken); print("possible leaks:",leaks); sys.exit(1)
-          print("Website quality gate PASS")
+          failures=[]
+          pages=sorted(Path(".").glob("*.html"))
+          if not pages: failures.append("No HTML pages found")
+          for p in pages:
+              text=p.read_text(encoding="utf-8")
+              class P(HTMLParser): pass
+              try: P().feed(text)
+              except Exception as e: failures.append(f"{p}: HTML parse error {e}")
+              required=['<meta name="viewport"','<meta name="description"','<title>','<main']
+              missing=[x for x in required if x.lower() not in text.lower()]
+              if p.name=="index.html":
+                  has_primary=('<h1' in text.lower()) or ('class="hero-title"' in text.lower() and 'alt="THE LONG AFTER"' in text)
+              else:
+                  has_primary='<h1' in text.lower()
+              if not has_primary: missing.append("primary page heading")
+              if missing: failures.append(f"{p}: missing {missing}")
+              refs=re.findall(r'(?:src|href)=["\']([^"\'#?]+)',text,re.I)
+              local=[r[2:] if r.startswith("./") else r for r in refs if not re.match(r'^(?:https?:|mailto:|tel:|data:)',r)]
+              broken=[r for r in local if r and not Path(r).exists()]
+              if broken: failures.append(f"{p}: broken local refs {broken}")
+              forbidden=["PRIVATE KEY","Bearer ","api_key","access_token"]
+              leaks=[x for x in forbidden if x in text]
+              if leaks: failures.append(f"{p}: possible secret markers {leaks}")
+          if failures:
+              print("\n".join(failures)); sys.exit(1)
+          print(f"Website quality gate PASS ({len(pages)} pages)")
