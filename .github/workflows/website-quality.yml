@@ -62,8 +62,8 @@ jobs:
               if insecure: failures.append(f"{p}: insecure http resource/link")
               localdev=[x for x in ("localhost","127.0.0.1","file://") if x in text.lower()]
               if localdev: failures.append(f"{p}: local-development reference {localdev}")
-              mains=len(re.findall(r'<main\\b',text,re.I))
-              h1s=len(re.findall(r'<h1\\b',text,re.I))
+              mains=text.lower().count('<main')
+              h1s=text.lower().count('<h1')
               if mains!=1: failures.append(f"{p}: expected exactly one main, found {mains}")
               if h1s!=1: failures.append(f"{p}: expected exactly one h1, found {h1s}")
           if failures:
