@@ -51,6 +51,13 @@ jobs:
               leaks=[x for x in forbidden if x in text]
               if leaks: failures.append(f"{p}: possible secret markers {leaks}")
               if p.name=="404.html" and "noindex" not in text: failures.append("404.html: missing noindex")
+              if '<html lang=' not in text.lower(): failures.append(f"{p}: missing document language")
+              if '<a class="skip"' not in text.lower(): failures.append(f"{p}: missing skip navigation")
+              imgs=re.findall(r'<img\\b[^>]*>',text,re.I)
+              no_alt=[img for img in imgs if not re.search(r'\\balt=["\\\'][^"\\\']*["\\\']',img,re.I)]
+              if no_alt: failures.append(f"{p}: image missing alt attribute")
+              currents=len(re.findall(r'aria-current=["\\\']page["\\\']',text,re.I))
+              if p.name not in ("index.html","404.html") and currents!=1: failures.append(f"{p}: expected one aria-current page marker, found {currents}")
           if failures:
               print("\n".join(failures)); sys.exit(1)
           print(f"Website quality gate PASS ({len(pages)} pages)")
