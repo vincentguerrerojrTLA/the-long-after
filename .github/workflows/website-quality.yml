@@ -58,6 +58,14 @@ jobs:
               if no_alt: failures.append(f"{p}: image missing alt attribute")
               currents=len(re.findall(r'aria-current=["\\\']page["\\\']',text,re.I))
               if p.name not in ("index.html","404.html") and currents!=1: failures.append(f"{p}: expected one aria-current page marker, found {currents}")
+              insecure=re.findall(r'(?:(?:src|href)=["\\\'])http://',text,re.I)
+              if insecure: failures.append(f"{p}: insecure http resource/link")
+              localdev=[x for x in ("localhost","127.0.0.1","file://") if x in text.lower()]
+              if localdev: failures.append(f"{p}: local-development reference {localdev}")
+              mains=len(re.findall(r'<main\\b',text,re.I))
+              h1s=len(re.findall(r'<h1\\b',text,re.I))
+              if mains!=1: failures.append(f"{p}: expected exactly one main, found {mains}")
+              if h1s!=1: failures.append(f"{p}: expected exactly one h1, found {h1s}")
           if failures:
               print("\n".join(failures)); sys.exit(1)
           print(f"Website quality gate PASS ({len(pages)} pages)")
