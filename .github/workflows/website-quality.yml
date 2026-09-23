@@ -25,6 +25,7 @@ jobs:
           from pathlib import Path
           import re, sys
           failures=[]
+          titles={}
           pages=sorted(Path(".").glob("*.html"))
           if not pages: failures.append("No HTML pages found")
           for p in pages:
@@ -40,6 +41,11 @@ jobs:
                   has_primary='<h1' in text.lower()
               if not has_primary: missing.append("primary page heading")
               if missing: failures.append(f"{p}: missing {missing}")
+              title=re.search(r"<title>(.*?)</title>",text,re.I|re.S)
+              if title:
+                  value=re.sub(r"\\s+"," ",title.group(1)).strip()
+                  if value in titles: failures.append(f"{p}: duplicate title with {titles[value]}")
+                  titles[value]=p
               refs=re.findall(r'(?:src|href)=["\']([^"\'#?]+)',text,re.I)
               local=[r[2:] if r.startswith("./") else r for r in refs if not re.match(r'^(?:https?:|mailto:|tel:|data:)',r)]
               broken=[r for r in local if r and not Path(r).exists()]
@@ -47,6 +53,7 @@ jobs:
               forbidden=["PRIVATE KEY","Bearer ","api_key","access_token"]
               leaks=[x for x in forbidden if x in text]
               if leaks: failures.append(f"{p}: possible secret markers {leaks}")
+              if p.name=="404.html" and "noindex" not in text: failures.append("404.html: missing noindex")
           if failures:
               print("\n".join(failures)); sys.exit(1)
           print(f"Website quality gate PASS ({len(pages)} pages)")
