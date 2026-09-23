@@ -1,0 +1,40 @@
+name: Website Quality
+on:
+  pull_request:
+    paths:
+      - "index.html"
+      - "assets/**"
+      - ".github/workflows/website-quality.yml"
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "assets/**"
+      - ".github/workflows/website-quality.yml"
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate public site
+        shell: python
+        run: |
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re, sys
+          p=Path("index.html")
+          text=p.read_text(encoding="utf-8")
+          class P(HTMLParser): pass
+          P().feed(text)
+          required=['<meta name="viewport"','<meta name="description"','<title>','<main','<h1']
+          missing=[x for x in required if x.lower() not in text.lower()]
+          refs=re.findall(r'(?:src|href)=["\']([^"\'#?]+)',text,re.I)
+          local=[r[2:] if r.startswith("./") else r for r in refs if not re.match(r'^(?:https?:|mailto:|tel:|data:)',r)]
+          broken=[r for r in local if r and not Path(r).exists()]
+          forbidden=["PRIVATE KEY","Bearer ","api_key","access_token"]
+          leaks=[x for x in forbidden if x in text]
+          if missing or broken or leaks:
+              print("missing:",missing); print("broken:",broken); print("possible leaks:",leaks); sys.exit(1)
+          print("Website quality gate PASS")
