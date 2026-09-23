@@ -197,6 +197,12 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
  .workspace-bg{background-size:contain!important;background-position:center center!important}
 }
 
+
+/* Consistent visual-stage sizing prevents UI from squeezing approved artwork. */
+.workspace-bg{aspect-ratio:16/10!important;width:100%!important;min-width:0!important}
+@media(min-width:901px){.workspace{min-height:min(720px,72vh)!important}.workspace-bg{aspect-ratio:auto!important}}
+@media(max-width:900px){.workspace-body{max-height:none!important}}
+
 </style>
 </head>
 <body>
