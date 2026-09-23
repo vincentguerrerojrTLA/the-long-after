@@ -1,7 +1,8 @@
 (() => {
-  const RAW_BASE = 'https://raw.githubusercontent.com/vincentguerrerojrTLA/the-long-after/main';
+  const RAW_BASE = new URL('../data/', window.location.href).href.replace(/data\/$/, '');
   const PROJECT_URL = `${RAW_BASE}/data/project-status.json`;
   const LORE_URL = `${RAW_BASE}/data/lore-public.json`;
+  const SHOW_INTERNAL_PROGRESS = false;
   let timer = null;
   let lastProjectFingerprint = '';
   let lastLoreFingerprint = '';
@@ -90,90 +91,17 @@
     const release = data.release || {};
     const active = data.active || {};
     const progress = pct(Number(active.completedGates || 0), Number(active.totalGates || 0));
-    ensureHomeProgressBar(data);
-    const card = q('.release-card');
-    if (card) {
-      setText(q('.release-head b', card), release.label);
-      setText(q('.release-head span', card), release.status);
-      setText(q('.release-main small', card), release.estimatedDropLabel);
-      setText(q('.release-main strong', card), release.estimatedDrop);
-      setText(q('.release-main p', card), release.window);
-      const phase = q('.phase-row', card);
-      if (phase) {
-        setText(q('span:first-child', phase), `${active.phaseNumber || ''} — ${active.phaseTitle || ''}`.trim());
-        setText(q('span:last-child', phase), `${active.completedGates ?? 0} / ${active.totalGates ?? 0}`);
-      }
-      const bar = q('.bar i', card);
-      if (bar) bar.style.width = `${progress}%`;
-      const gauge = q('.percent-gauge', card);
-      if (gauge) {
-        setText(q('span', gauge), `${active.phaseTitle || 'Phase'} completion`);
-        setText(q('strong', gauge), `${progress}%`);
-      }
-      setText(q('.release-note', card), active.note);
-      const bands = qa('.release-bands .band', card);
-      if (bands[0]) setText(q('b', bands[0]), release.fastPath);
-      if (bands[1]) setText(q('b', bands[1]), release.planningTarget);
-      if (bands[2]) setText(q('b', bands[2]), release.riskCase);
-    }
-
-    const eta = q('.eta-card');
-    if (eta) {
-      setText(q('h3', eta), release.estimatedDropLabel);
-      const month = q('.month', eta);
-      if (month && release.estimatedDrop) month.innerHTML = String(release.estimatedDrop).replace(' ', '<br>');
-      setText(q('.window', eta), release.window?.replace('Working window · ', 'Working release window · '));
-      const bands = qa('.bands > div', eta);
-      if (bands[0]) setText(q('b', bands[0]), release.fastPath);
-      if (bands[1]) setText(q('b', bands[1]), release.planningTarget);
-      if (bands[2]) setText(q('b', bands[2]), release.riskCase);
-    }
+    if (SHOW_INTERNAL_PROGRESS) ensureHomeProgressBar(data);
+    // Public cards intentionally keep milestone-based copy from index.html.
+    // Internal schedule/ticker data is not projected into the public UI.
   }
 
   function renderActivity(data) {
-    const strip = q('.activity-strip');
-    if (!strip || !Array.isArray(data.activity)) return;
-    strip.replaceChildren(...data.activity.map(entry => {
-      const div = document.createElement('div');
-      div.className = 'activity-entry';
-      const b = document.createElement('b');
-      b.textContent = entry.kind || 'UPDATE';
-      div.append(b, document.createTextNode(entry.text || ''));
-      return div;
-    }));
+    // Public homepage activity stays descriptive rather than exposing internal tickers.
   }
 
   function renderRoadmap(data) {
-    const active = data.active || {};
-    const progress = pct(Number(active.completedGates || 0), Number(active.totalGates || 0));
-    const gauge = q('.project-gauge');
-    if (gauge) {
-      const labels = qa('.micro-label', gauge);
-      if (labels[0]) setText(labels[0], 'Current active phase');
-      const title = q('[style*="font-size:22px"]', gauge);
-      setText(title, `${active.phaseTitle || 'Phase'} completion`);
-      const value = q('strong', gauge);
-      setText(value, `${progress}%`);
-      const bar = q('.bar i', gauge);
-      if (bar) bar.style.width = `${progress}%`;
-      const note = qa('div', gauge).find(el => el.style?.fontSize === '11px');
-      if (note) setText(note, `${active.completedGates ?? 0} of ${active.totalGates ?? 0} ${active.phaseTitle || 'phase'} gates complete · ${active.ticker || 'Current ticker'} remains active.`);
-    }
-
-    if (Array.isArray(data.phases)) {
-      const cards = qa('.phases .phase');
-      data.phases.forEach((phase, i) => {
-        const card = cards[i];
-        if (!card) return;
-        card.classList.toggle('active', phase.state === 'ACTIVE');
-        setText(q('.phase-num', card), phase.number);
-        setText(q('.phase-title', card), phase.title);
-        let phaseState = phase.state || '';
-        if (Number.isFinite(Number(phase.completed)) && Number.isFinite(Number(phase.total))) phaseState += ` · ${phase.completed}/${phase.total}`;
-        setText(q('.phase-state', card), phaseState);
-        setText(q('.phase-focus', card), phase.focus);
-      });
-    }
+    // Roadmap copy is intentionally milestone-based; internal percentages and ETAs stay private.
   }
 
   function mergeCatalog(data) {
