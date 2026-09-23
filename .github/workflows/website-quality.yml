@@ -1,0 +1,71 @@
+name: Website Quality
+on:
+  pull_request:
+    paths:
+      - "*.html"
+      - "assets/**"
+      - ".github/workflows/website-quality.yml"
+  push:
+    branches: [main]
+    paths:
+      - "*.html"
+      - "assets/**"
+      - ".github/workflows/website-quality.yml"
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate public site
+        shell: python
+        run: |
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re, sys
+          failures=[]
+          titles={}
+          pages=sorted(Path(".").glob("*.html"))
+          if not pages: failures.append("No HTML pages found")
+          for p in pages:
+              text=p.read_text(encoding="utf-8")
+              class P(HTMLParser): pass
+              try: P().feed(text)
+              except Exception as e: failures.append(f"{p}: HTML parse error {e}")
+              required=['<meta name="viewport"','<meta name="description"','<title>','<main']
+              missing=[x for x in required if x.lower() not in text.lower()]
+              has_primary='<h1' in text.lower()
+              if not has_primary: missing.append("primary page heading")
+              if missing: failures.append(f"{p}: missing {missing}")
+              title=re.search(r"<title>(.*?)</title>",text,re.I|re.S)
+              if title:
+                  value=re.sub(r"\\s+"," ",title.group(1)).strip()
+                  if value in titles: failures.append(f"{p}: duplicate title with {titles[value]}")
+                  titles[value]=p
+              refs=re.findall(r'(?:src|href)=["\']([^"\'#?]+)',text,re.I)
+              local=[r[2:] if r.startswith("./") else r for r in refs if not re.match(r'^(?:https?:|mailto:|tel:|data:)',r)]
+              broken=[r for r in local if r and not Path(r).exists()]
+              if broken: failures.append(f"{p}: broken local refs {broken}")
+              forbidden=["PRIVATE KEY","Bearer ","api_key","access_token"]
+              leaks=[x for x in forbidden if x in text]
+              if leaks: failures.append(f"{p}: possible secret markers {leaks}")
+              if p.name=="404.html" and "noindex" not in text: failures.append("404.html: missing noindex")
+              if '<html lang=' not in text.lower(): failures.append(f"{p}: missing document language")
+              if '<a class="skip"' not in text.lower(): failures.append(f"{p}: missing skip navigation")
+              imgs=re.findall(r'<img\\b[^>]*>',text,re.I)
+              no_alt=[img for img in imgs if not re.search(r'\\balt=["\\\'][^"\\\']*["\\\']',img,re.I)]
+              if no_alt: failures.append(f"{p}: image missing alt attribute")
+              currents=len(re.findall(r'aria-current=["\\\']page["\\\']',text,re.I))
+              if p.name not in ("index.html","404.html") and currents!=1: failures.append(f"{p}: expected one aria-current page marker, found {currents}")
+              insecure=re.findall(r'(?:(?:src|href)=["\\\'])http://',text,re.I)
+              if insecure: failures.append(f"{p}: insecure http resource/link")
+              localdev=[x for x in ("localhost","127.0.0.1","file://") if x in text.lower()]
+              if localdev: failures.append(f"{p}: local-development reference {localdev}")
+              mains=text.lower().count('<main')
+              h1s=text.lower().count('<h1')
+              if mains!=1: failures.append(f"{p}: expected exactly one main, found {mains}")
+              if h1s!=1: failures.append(f"{p}: expected exactly one h1, found {h1s}")
+          if failures:
+              print("\n".join(failures)); sys.exit(1)
+          print(f"Website quality gate PASS ({len(pages)} pages)")
