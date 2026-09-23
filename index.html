@@ -174,6 +174,15 @@ header{height:var(--header-h);padding:0 clamp(16px,3vw,42px);grid-template-colum
  .workspace-bg{min-height:250px!important}
 }
 
+
+/* ARTWORK VIEWER CLEANUP */
+.visual-art,.hero-art,.item-art{position:relative;isolation:isolate}
+.visual-art img,.hero-art img,.item-art img{display:block;width:100%;height:auto;object-fit:contain}
+.workspace-bg{cursor:zoom-in}
+.workspace-bg:hover{transform:scale(.995)}
+.workspace-bg{transition:transform .18s ease}
+@media(prefers-reduced-motion:reduce){.workspace-bg{transition:none!important}.workspace-bg:hover{transform:none!important}}
+
 </style>
 </head>
 <body>
